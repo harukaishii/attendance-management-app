@@ -1,0 +1,151 @@
+body {
+    background-color: #E1E1E1;
+    font-family: "Hiragino Kaku Gothic ProN", "ヒラギノ角ゴ ProN", YuGothic, "游ゴシック", "メイリオ", Meiryo, sans-serif;
+}
+
+
+.list-container {
+    max-width: 900px;
+    margin: 50px auto;
+    padding: 20px;
+}
+
+.page-title {
+    font-size: 30px;
+    font-weight: bold;
+    margin-bottom: 2rem;
+    padding-left: 10px;
+    border-left: 5px solid #000;
+    text-align: left;
+    margin-left: 10px;
+}
+
+/* 月移動ナビゲーション */
+.month-navigation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    background-color: #ffff;
+    border-radius: 10px;
+    padding: 15px 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.arrow-link {
+    font-size: 1rem;
+    padding: 0 20px;
+    text-decoration: none;
+    color: #737373;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+}
+
+.arrow-icon {
+    width: 16px;
+    height: 16px;
+    margin: 0 5px;
+}
+
+.current-month {
+    font-size: 1.5rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin: 0 20px;
+}
+
+.calender-icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
+}
+
+/* テーブルスタイル */
+.attendance-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+    border: none;
+    margin-top: -10px;
+}
+
+.attendance-table thead {
+    background-color: #ffff;
+}
+
+.attendance-table th {
+    padding: 15px 10px;
+    background-color: #ffffff;
+    font-weight: bold;
+    border: none;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.attendance-table thead th:first-child {
+    border-top-left-radius: 8px;
+    border-top: 1px solid #e5e7eb;
+    border-left: 1px solid #e5e7eb;
+}
+
+.attendance-table thead th:last-child {
+    border-top-right-radius: 8px;
+    border-top: 1px solid #e5e7eb;
+    border-right: 1px solid #e5e7eb;
+}
+
+.attendance-table tbody tr {
+    background-color: #ffffff;
+}
+
+.attendance-table td {
+    padding: 15px 10px;
+    border: none;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.attendance-table tbody tr td:first-child {
+    border-left: 1px solid #e5e7eb;
+}
+
+.attendance-table tbody tr td:last-child {
+    border-right: 1px solid #e5e7eb;
+}
+
+/* 未来日付の行 */
+.future-date {
+    color: #a0a0a0;
+    background-color: #fafafa;
+}
+
+.date-col {
+    text-align: left;
+}
+
+.detail-col {
+    width: 80px;
+}
+
+.detail-link {
+    color: #000000;
+    text-decoration: none;
+}
+
+.detail-link:hover {
+    text-decoration: underline;
+}
+
+.success-message {
+    background-color: #d1fae5;
+    color: #065f46;
+    border: 1px solid #10b981;
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    text-align: center;
+    opacity: 1;
+}

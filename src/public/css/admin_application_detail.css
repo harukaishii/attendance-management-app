@@ -1,0 +1,98 @@
+body {
+    background-color: #E1E1E1;
+    font-family: "Hiragino Kaku Gothic ProN", "ヒラギノ角ゴ ProN", YuGothic, "游ゴシック", "メイリオ", Meiryo, sans-serif;
+}
+
+.detail-container {
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 20px;
+}
+
+.page-title {
+    font-size: 30px;
+    font-weight: bold;
+    margin-bottom: 2rem;
+    padding-left: 10px;
+    border-left: 5px solid #000000;
+    text-align: left;
+    margin-left: 10px;
+}
+
+.detail-card {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    margin-bottom: 30px;
+}
+
+.detail-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.detail-table tr {
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.detail-table tr:last-child {
+    border-bottom: none;
+}
+
+.detail-table th {
+    padding: 20px;
+    text-align: left;
+    font-weight: bold;
+    background-color: #ffffff;
+    width: 150px;
+    vertical-align: top;
+    color: #737373;
+}
+
+.detail-table td {
+    padding: 20px;
+    background-color: #ffffff;
+    font-weight: bold;
+}
+
+.time-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.time-display {
+    font-size: 16px;
+    color: #333;
+}
+
+.separator {
+    color: #999;
+}
+
+.button-wrapper {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.button-approve {
+    padding: 10px 30px;
+    background-color: #000000;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: normal;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.button-approve:hover:not(:disabled) {
+    background-color: #555;
+}
+
+.button-approve:disabled {
+    background-color: #999;
+    cursor: not-allowed;
+}

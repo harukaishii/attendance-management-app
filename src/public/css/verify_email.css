@@ -1,0 +1,44 @@
+.main {
+    padding: 30px 0;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.verify-comment__wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    align-items: center;
+}
+
+.verify-comment {
+    margin-top: 150px;
+    text-align: center;
+    text-decoration: solid;
+    font-weight: bold;
+}
+
+.verify-send {
+    margin-top: 30px;
+    text-align: center;
+}
+
+.verify-send__button {
+    padding: 8px 20px;
+    border: 1px solid black;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    font-weight: bold;
+}
+
+.verify-again__link {
+    margin-top: 30px;
+    text-align: center;
+    text-decoration: none;
+    color: #0073CC;
+}

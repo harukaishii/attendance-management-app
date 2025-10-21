@@ -1,0 +1,124 @@
+/* public/css/attendance.css */
+
+body {
+    background-color: #ffffff;
+    font-family: sans-serif;
+}
+
+.main-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.card {
+    background-color: #ffffff;
+    padding: 3rem;
+    text-align: center;
+    width: 100%;
+    max-width: 1000px;
+}
+
+.timestamp-display {
+    margin: 2rem 0;
+    margin-bottom: 70px;
+}
+
+.date {
+    font-size: 40px;
+    color: #6b7280;
+}
+
+.time {
+    font-size: 80px;
+    font-weight: bold;
+    margin-top: 50px;
+}
+
+.status-label__wrapper{
+    background-color: #C8C8C8;
+    border-radius: 9999px;
+    width: 100px;
+    margin: 0 auto;
+}
+
+.status-label {
+    font-size: 18px;
+    color:#696969;
+    font-weight: bold;
+    text-align: center;
+    padding: 10px;
+}
+
+.message {
+    font-size: 1.125rem;
+    font-weight: bold;
+    margin-top: 1.5rem;
+}
+
+.form-action {
+    display: block;
+    margin-bottom: 1rem;
+}
+
+.button-section {
+    margin-top: 1.5rem;
+}
+.button-group {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    width: 100%;
+}
+
+.button {
+    font-weight: bold;
+    padding: 0.75rem 2rem;
+    border: none;
+    border-radius: 9999px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 221px;
+}
+
+.button-primary {
+    background-color:#000000;
+    color: #ffffff;
+}
+
+.button-primary:hover {
+    background-color: #2563eb;
+}
+
+.button-secondary {
+    background-color: #ffffff;
+    color: #4b5563;
+    border: 1px solid #d1d5db;
+}
+
+.button-secondary:hover {
+    background-color: #f9fafb;
+}
+
+.message-box {
+    padding: 1rem;
+    border-radius: 0.5rem;
+    margin-bottom: 1.5rem;
+    font-weight: bold;
+    text-align: center;
+}
+
+.message-success {
+    background-color: #d1fae5;
+    color: #065f46;
+    border: 1px solid #10b981;
+}
+
+.message-error {
+    background-color: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #ef4444;
+}
