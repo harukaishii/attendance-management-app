@@ -30,7 +30,7 @@ class AttendanceDetailController extends Controller
             return redirect()->route('attendance.list.index')->with('error','指定された日の勤怠データが見つかりません');
         }
 
-        //ステータスを取ってきて編集可否を判断できるように
+        //承認まちの時だけ編集不可にする
         $isEditable = (int)$attendance->status->value !== AttendanceStatus::Unapproved->value;
 
         $note = $attendance->note ?? '';
@@ -51,8 +51,8 @@ class AttendanceDetailController extends Controller
         ->findOrFail($id);
 
 
-        if ($attendance->status->value === AttendanceStatus::Approved->value) {
-            return back()->with('error', '承認済みの勤怠は修正できません。');
+        if ($attendance->status->value === AttendanceStatus::Unapproved->value) {
+            return back()->with('error', '承認待ちのため修正できません。');
         }
 
         DB::beginTransaction();

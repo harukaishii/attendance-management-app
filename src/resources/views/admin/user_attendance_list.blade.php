@@ -58,10 +58,15 @@
         </tbody>
     </table>
 
-    <div class="button-group">
-        <a href="{{ route('admin_staff.index') }}" class="btn-back">スタッフ一覧に戻る</a>
-        <button type="button" class="btn-csv">CSVダウンロード</button>
-    </div>
+   <div class="button-group">
+    <a href="{{ route('admin_attendance.csv', [
+        'user_id' => $user->id,
+        'year' => $currentMonth->year,
+        'month' => $currentMonth->month
+    ]) }}" class="btn-csv">
+        CSV出力
+    </a>
+</div>
 </div>
 @endsection
 

@@ -140,8 +140,8 @@ body {
 
 /* ボタングループ */
 .button-group {
-    display: flex;
-    justify-content: space-between;
+    text-align: right;
+    display: block;
     gap: 15px;
     margin-top: 30px;
 }
@@ -157,17 +157,9 @@ body {
     border: none;
 }
 
-.btn-back {
-    background-color: #6c757d;
-    color: white;
-}
-
-.btn-back:hover {
-    background-color: #5a6268;
-}
 
 .btn-csv {
-    background-color: #333;
+    background-color: #000000;
     color: white;
 }
 

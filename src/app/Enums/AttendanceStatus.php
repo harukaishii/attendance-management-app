@@ -13,8 +13,8 @@ enum AttendanceStatus: int
     {
         return match ($this) {
             self::Entered => '入力済',
-            self::Unapproved => '承認前',
-            self::Approved => '承認済',
+            self::Unapproved => '承認待ち',
+            self::Approved => '承認済み',
             self::Rejected => '差戻し'
         };
     }

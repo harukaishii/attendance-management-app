@@ -52,11 +52,13 @@
         </table>
     </div>
 
-    @if ($attendance->status->value === \App\Enums\AttendanceStatus::Unapproved->value)
-        <div class="button-wrapper">
+    <div class="button-wrapper">
+        @if ($attendance->status->value === \App\Enums\AttendanceStatus::Unapproved->value)
             <button type="button" class="button-approve" id="approveBtn">承認</button>
-        </div>
-    @endif
+        @else
+            <button type="button" class="button-approved" disabled style="background-color: #696969; cursor: not-allowed;">承認済み</button>
+        @endif
+    </div>
 </div>
 @endsection
 
@@ -86,27 +88,26 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    // ステータス表示を更新
-                    const statusBadge = document.getElementById('statusBadge');
-                    statusBadge.textContent = '承認済';
-                    statusBadge.classList.remove('status-1');
-                    statusBadge.classList.add('status-2');
-
-                    // ボタンを非表示
-                    approveBtn.style.display = 'none';
-
                     alert('承認しました');
+
+                    // ボタンを「承認済み」に変更
+                    approveBtn.textContent = '承認済み';
+                    approveBtn.style.backgroundColor = '#696969';
+                    approveBtn.style.cursor = 'not-allowed';
+                    approveBtn.disabled = true;
+
+                    // リダイレクトを削除（画面に留まる）
                 } else {
                     alert('承認に失敗しました');
                     approveBtn.disabled = false;
-                    approveBtn.textContent = '承認する';
+                    approveBtn.textContent = '承認';
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
                 alert('エラーが発生しました');
                 approveBtn.disabled = false;
-                approveBtn.textContent = '承認する';
+                approveBtn.textContent = '承認';
             });
         });
     }

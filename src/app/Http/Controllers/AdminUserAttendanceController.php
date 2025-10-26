@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Attendance;
+use App\Models\Breaktime;
 use Carbon\Carbon;
+use Carbon\CarbonPeriod;
 
 class AdminUserAttendanceController extends Controller
 {
@@ -116,6 +118,104 @@ class AdminUserAttendanceController extends Controller
             'currentMonth' => $currentMonth,
             'prevMonthUrl' => $prevMonthUrl,
             'nextMonthUrl' => $nextMonthUrl,
+        ]);
+    }
+
+    public function downloadCsv($user_id, Request $request)
+    {
+        $user = User::findOrFail($user_id);
+
+        // 年と月を取得（クエリパラメータから）
+        $year = $request->query('year', now()->year);
+        $month = $request->query('month', now()->month);
+
+        // 指定された年月の1日を作成
+        $currentMonth = Carbon::create($year, $month, 1);
+
+        // 勤怠データ取得
+        $startOfMonth = $currentMonth->copy()->startOfMonth();
+        $endOfMonth = $currentMonth->copy()->endOfMonth();
+
+        $attendances = Attendance::where('user_id', $user_id)
+            ->whereYear('date', $year)
+            ->whereMonth('date', $month)
+            ->with('breaktimes')
+            ->orderBy('date')
+            ->get()
+            ->keyBy(function ($item) {
+                return Carbon::parse($item->date)->format('Y-m-d');
+            });
+
+        // CSVデータ作成
+        $csvData = [];
+
+        // ヘッダー行
+        $csvData[] = ['日付', '出勤', '退勤', '休憩', '合計'];
+
+        // データ行
+        $period = CarbonPeriod::create($startOfMonth, $endOfMonth);
+        foreach ($period as $date) {
+            $dateStr = $date->format('Y-m-d');
+            $attendance = $attendances->get($dateStr);
+
+            if ($attendance && $attendance->start_time) {
+                // 休憩時間の合計を計算
+                $totalBreak = 0;
+                foreach ($attendance->breaktimes as $breaktime) {
+                    if ($breaktime->start_time && $breaktime->end_time) {
+                        $totalBreak += Carbon::parse($breaktime->end_time)->diffInMinutes(Carbon::parse($breaktime->start_time));
+                    }
+                }
+
+                // 勤務時間を計算
+                $totalWork = 0;
+                if ($attendance->start_time && $attendance->end_time) {
+                    $totalWork = Carbon::parse($attendance->end_time)->diffInMinutes(Carbon::parse($attendance->start_time)) - $totalBreak;
+                }
+
+                // 曜日を追加
+                $dayOfWeek = ['日', '月', '火', '水', '木', '金', '土'][$date->dayOfWeek];
+                $formattedDate = $date->format('m/d') . '(' . $dayOfWeek . ')';
+
+                $csvData[] = [
+                    $formattedDate,
+                    $attendance->start_time ? Carbon::parse($attendance->start_time)->format('H:i') : '-',
+                    $attendance->end_time ? Carbon::parse($attendance->end_time)->format('H:i') : '-',
+                    $totalBreak > 0 ? sprintf('%d:%02d', floor($totalBreak / 60), $totalBreak % 60) : '-',
+                    $totalWork > 0 ? sprintf('%d:%02d', floor($totalWork / 60), $totalWork % 60) : '-',
+                ];
+            } else {
+                // 曜日を追加
+                $dayOfWeek = ['日', '月', '火', '水', '木', '金', '土'][$date->dayOfWeek];
+                $formattedDate = $date->format('m/d') . '(' . $dayOfWeek . ')';
+
+                $csvData[] = [
+                    $formattedDate,
+                    '-',
+                    '-',
+                    '-',
+                    '-',
+                ];
+            }
+        }
+
+        // CSVファイル生成
+        $fileName = sprintf('%s_%s_勤怠.csv', $user->name, $currentMonth->format('Y年m月'));
+
+        $callback = function () use ($csvData) {
+            $file = fopen('php://output', 'w');
+            // BOM追加（Excel対応）
+            fprintf($file, chr(0xEF) . chr(0xBB) . chr(0xBF));
+
+            foreach ($csvData as $row) {
+                fputcsv($file, $row);
+            }
+            fclose($file);
+        };
+
+        return response()->stream($callback, 200, [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="' . $fileName . '"',
         ]);
     }
 }

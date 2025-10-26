@@ -12,8 +12,6 @@ class AdminAttendanceListController extends Controller
 {
     public function index(Request $request)
     {
-        // ミドルウェア 'is.admin' で既に管理者チェックが行われているため、
-        // ここでのチェックは不要
 
         // 日付パラメータを取得、なければ当日
         $today = $request->query('date') ? $request->query('date') : Carbon::now()->format('Y-m-d');

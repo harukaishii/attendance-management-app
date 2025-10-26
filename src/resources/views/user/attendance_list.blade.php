@@ -10,6 +10,12 @@
 <div class="list-container">
     <h1 class="page-title">勤怠一覧</h1>
 
+     @if (session('success'))
+    <div class="success-message" id="successMessage">
+        {{ session('success') }}
+    </div>
+    @endif
+
     <div class="month-navigation">
         <a href="{{ $prevMonthUrl }}" class="arrow-link">
             <img src="{{ asset('images/arrow-left.png') }}" alt="前月へ" class="arrow-icon">
@@ -61,5 +67,16 @@
 
 @section('scripts')
 <script>
+    // 成功メッセージを3秒後に自動で消す
+    const successMessage = document.getElementById('successMessage');
+    if (successMessage) {
+        setTimeout(() => {
+            successMessage.style.transition = 'opacity 0.5s';
+            successMessage.style.opacity = '0';
+            setTimeout(() => {
+                successMessage.remove();
+            }, 500);
+        }, 3000); // 3秒後にフェードアウト開始
+    }
 </script>
 @endsection

@@ -13,6 +13,9 @@
     <form action="{{ route('attendance.detail.update', ['id' => $attendance->id]) }}" method="POST" class="detail-form">
         @csrf
 
+        {{-- ステータスをhiddenで渡す --}}
+        <input type="hidden" name="current_status" value="{{ $attendance->status->value }}">
+
         <div class="detail-card">
 
             <table class="detail-table">
@@ -33,10 +36,8 @@
                                     @if ($isEditable)
                                         <input type="time" name="start_time" value="{{ \Carbon\Carbon::parse($attendance->start_time)->format('H:i') }}" class="time-input">
                                     @else
-                                        {{-- 修正: time-displayクラスを追加 --}}
                                         <span class="time-display">{{ \Carbon\Carbon::parse($attendance->start_time)->format('H:i') }}</span>
                                     @endif
-                                    {{-- 修正: breaks.{$i}.end から start_time に変更 --}}
                                     <div class="form__error @error('start_time') error-has-message @enderror">
                                         @error('start_time')
                                             {{ $message }}
@@ -50,10 +51,8 @@
                                     @if ($isEditable)
                                         <input type="time" name="end_time" value="{{ $attendance->end_time ? \Carbon\Carbon::parse($attendance->end_time)->format('H:i') : '' }}" class="time-input">
                                     @else
-                                        {{-- 修正: time-displayクラスを追加 --}}
                                         <span class="time-display">{{ $attendance->end_time ? \Carbon\Carbon::parse($attendance->end_time)->format('H:i') : '-' }}</span>
                                     @endif
-                                    {{-- 修正: breaks.{$i}.end から end_time に変更 --}}
                                     <div class="form__error @error('end_time') error-has-message @enderror">
                                         @error('end_time')
                                             {{ $message }}
@@ -87,7 +86,6 @@
                                     @if ($isEditable)
                                         <input type="time" name="breaks[{{ $i }}][start]" value="{{ $breakStart }}" class="time-input">
                                     @else
-                                        {{-- 修正: time-displayクラスを追加 --}}
                                         <span class="time-display">{{ $breakStart ?: '--:--' }}</span>
                                     @endif
                                     <div class="form__error @error("breaks.{$i}.start") error-has-message @enderror">
@@ -103,7 +101,6 @@
                                     @if ($isEditable)
                                         <input type="time" name="breaks[{{ $i }}][end]" value="{{ $breakEnd }}" class="time-input">
                                     @else
-                                        {{-- 修正: time-displayクラスを追加 --}}
                                         <span class="time-display">{{ $breakEnd ?: '--:--' }}</span>
                                     @endif
                                     <div class="form__error @error("breaks.{$i}.end") error-has-message @enderror">
@@ -122,7 +119,6 @@
                     <td>
                         @if ($isEditable)
                             <textarea name="note" class="note-input" placeholder="修正理由などの備考">{{ $request->note ?? $note ?? '' }}</textarea>
-                        {{-- 修正: breaks.{$i}.end から note に変更 --}}
                         <div class="form__error @error('note') error-has-message @enderror">
                             @error('note')
                                 {{ $message }}

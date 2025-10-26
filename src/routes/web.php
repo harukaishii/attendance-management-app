@@ -11,6 +11,7 @@ use App\Http\Controllers\AdminAttendanceDetailController;
 use App\Http\Controllers\AdminStaffController;
 use App\Http\Controllers\AdminUserAttendanceController;
 use App\Http\Controllers\AdminApplicationController;
+use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
 
 
 /*
@@ -51,72 +52,50 @@ Route::middleware('auth')->group(function () {
 });
 
 
-// 管理者ログイン フォーム表示（GET）
-Route::get('/admin/login', function () {
-    return view('auth.admin_login');
-})->middleware('guest')->name('admin.login');
-
-// 管理者ログイン処理（POST）
-Route::post('/admin/login', function (Request $request) {
-    $validated = $request->validate([
-        'email' => ['required', 'email'],
-        'password' => ['required', 'string'],
-    ]);
-
-    if (auth()->attempt($validated, $request->filled('remember'))) {
-        // ログインしたユーザーが管理者か確認
-        if (auth()->user()->is_admin !== 1) {
-            auth()->logout();
-            return back()->withErrors(['email' => '管理者のみログイン可能です']);
-        }
-
-        $request->session()->regenerate();
-        return redirect()->intended(route('admin_attendance_list.index'));
-    }
-
-    return back()->withErrors(['email' => 'メールアドレスまたはパスワードが正しくありません']);
-})->middleware('guest')->name('admin.login.post');
-
+// 管理者ログイン（Fortifyを使用）
+Route::prefix('admin')->name('admin.')->middleware('guest')->group(function () {
+    Route::get('/login', [AuthenticatedSessionController::class, 'create'])->name('login');
+    Route::post('/login', [AuthenticatedSessionController::class, 'store']);
+});
 
 // 管理者ページ（認証済み＋管理者のみ）
-Route::middleware(['auth', 'is.admin'])->group(function () {
+Route::prefix('admin')->name('admin')->middleware(['auth', 'is.admin'])->group(function () {
+    // ログアウト
+    Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('.logout');
+
+    // CSVダウンロード（prefixがあるので /admin は不要）
+    Route::get('/user/{user_id}/attendance/csv', [AdminUserAttendanceController::class, 'downloadCsv'])
+        ->name('_attendance.csv');
+
     // 勤怠一覧
-    Route::get('/admin/attendances', [AdminAttendanceListController::class, 'index'])->name('admin_attendance_list.index');
+    Route::get('/attendances', [AdminAttendanceListController::class, 'index'])->name('_attendance_list.index');
 
-    //勤怠詳細表示（GET）
-    Route::get('/admin/attendances/{id}',[AdminAttendanceDetailController::class,'show'])->name('admin_attendance_detail.show');
+    // 勤怠詳細表示（GET）
+    Route::get('/attendances/{id}', [AdminAttendanceDetailController::class, 'show'])->name('_attendance_detail.show');
 
-    //勤怠詳細修正（POST）
-    Route::post('/attendances/{id}', [AdminAttendanceDetailController::class, 'update'])->name('admin_attendance_detail.update');
+    // 勤怠詳細修正（POST）
+    Route::post('/attendances/{id}', [AdminAttendanceDetailController::class, 'update'])->name('_attendance_detail.update');
 
-    //スタッフ一覧
-    Route::get('/admin/users', [AdminStaffController::class, 'index'])->name('admin_staff.index');
+    // スタッフ一覧
+    Route::get('/users', [AdminStaffController::class, 'index'])->name('_staff.index');
 
-    //月次勤怠一覧
-    Route::get('/admin/users/{user}/attendances/{year?}/{month?}', [AdminUserAttendanceController::class, 'index'])->name('admin_user_attendance.index');
+    // 月次勤怠一覧
+    Route::get('/users/{user}/attendances/{year?}/{month?}', [AdminUserAttendanceController::class, 'index'])->name('_user_attendance.index');
 
-    //申請一覧
-    Route::get('/admin/requests',[AdminApplicationController::class,'index'])->name('admin_request.index');
+    // 申請一覧
+    Route::get('/requests', [AdminApplicationController::class, 'index'])->name('_request.index');
 
-    //承認画面の表示
-    Route::get('/admin/requests/{id}', [AdminApplicationController::class, 'show'])->name('admin_request.show');
+    // 承認画面の表示
+    Route::get('/requests/{id}', [AdminApplicationController::class, 'show'])->name('_request.show');
 
-    //承認処理
-    Route::post('/admin/requests/{id}/approve', [AdminApplicationController::class, 'approve'])->name('admin_request.approve');
-
-    // 管理者用ログアウト
-    Route::post('/admin/logout', function (Request $request) {
-        auth()->logout();
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-        return redirect()->route('admin.login')->with('status', 'ログアウトしました');
-    })->name('admin.logout');
+    // 承認処理
+    Route::post('/requests/{id}/approve', [AdminApplicationController::class, 'approve'])->name('_request.approve');
 });
 
-// 管理者ログイン後のリダイレクト設定
+// 管理者トップページリダイレクト
 Route::get('/admin', function () {
     return redirect()->route('admin_attendance_list.index');
-});
+})->middleware('auth');
 
 
 // ログアウト後のリダイレクトを上書き

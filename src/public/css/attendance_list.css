@@ -138,3 +138,14 @@ body {
 .detail-link:hover{
     text-decoration: underline;
 }
+
+.success-message {
+    background-color: #d1fae5;
+    color: #065f46;
+    border: 1px solid #10b981;
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    text-align: center;
+    opacity: 1;
+}

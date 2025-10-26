@@ -3,7 +3,6 @@
 namespace App\Http\Requests;
 
 use Laravel\Fortify\Http\Requests\LoginRequest as FortifyLoginRequest;
-// 自作のフォームリクエストを使えるようにFortifyLoginRequestクラスを継承
 
 class LoginRequest extends FortifyLoginRequest
 {

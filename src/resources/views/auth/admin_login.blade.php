@@ -11,14 +11,14 @@
     <div class="login-form__heading">
         <h2>管理者ログイン</h2>
     </div>
-    <form class="form" action="{{ route('admin.login.post') }}" method="POST">
+    <form class="form" action="{{ route('admin.login') }}" method="POST">
         @csrf
         <div class="form__group-title">
             <span class="form__label--item">メールアドレス</span>
         </div>
         <div class="form__group-content">
             <div class="form__input--text">
-                <input type="email" name="email" value="" />
+                <input type="email" name="email" value="{{old('email')}}" />
             </div>
             <div class="form__error">
                 @error('email')
