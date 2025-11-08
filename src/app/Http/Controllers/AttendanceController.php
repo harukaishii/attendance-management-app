@@ -43,47 +43,27 @@ class AttendanceController extends Controller
     }
 
     //出勤ボタンの処理
-    public function start(){
+    public function start()
+    {
         $user = Auth::user();
 
-        $attendance = Attendance::where('user_id',$user->id)
-            ->whereDate('date',Carbon::today())
+        $attendance = Attendance::where('user_id', $user->id)
+            ->whereDate('date', Carbon::today())
             ->first();
-        if(is_null($attendance)){
+        if (is_null($attendance)) {
             Attendance::create([
                 'user_id' => $user->id,
                 'date' => Carbon::today(),
                 'start_time' => Carbon::now(),
             ]);
-            return redirect()->back()->with('success','出勤打刻が完了しました');
+            return redirect()->back()->with('success', '出勤打刻が完了しました');
         }
-        return redirect()->back()->with('error','すでに出勤打刻済みです');
+        return redirect()->back()->with('error', 'すでに出勤打刻済みです');
     }
 
     //退勤ボタンの処理
-    public function end(){
-        $user = Auth::user();
-        $attendance = Attendance::where('user_id', $user->id)
-            ->whereDate('date', Carbon::today())
-            ->first();
-        //休憩中の場合は退勤できない
-        $breaktime = Breaktime::where('attendance_id',$attendance->id)
-            ->whereNull('end_time')
-            ->first();
-        if(is_null($attendance)){
-            return redirect()->back()->with('error','出勤打刻がされていません');
-        }
-        if($breaktime){
-            return redirect()->back()->with('error','休憩中です。先に休憩を終了してください');
-        }
-        if(!is_null($attendance->end_time)){
-            return redirect()->back()->with('error','すでに出勤済です');
-        }
-        $attendance->update(['end_time' => Carbon::now()]);
-        return redirect()->back()->with('success','退勤打刻が完了しました');
-    }
-    //休憩入りボタンの処理
-    public function breakStart(){
+    public function end()
+    {
         $user = Auth::user();
         $attendance = Attendance::where('user_id', $user->id)
             ->whereDate('date', Carbon::today())
@@ -93,12 +73,39 @@ class AttendanceController extends Controller
             return redirect()->back()->with('error', '出勤打刻がされていません');
         }
 
-        $breaktime = Breaktime::where('attendance_id',$attendance->id)
+        //休憩中の場合は退勤できない
+        $breaktime = Breaktime::where('attendance_id', $attendance->id)
             ->whereNull('end_time')
             ->first();
 
-        if($breaktime){
-            return redirect()->back()->with('error','すでに休憩中です');
+        if ($breaktime) {
+            return redirect()->back()->with('error', '休憩中です。先に休憩を終了してください');
+        }
+        if (!is_null($attendance->end_time)) {
+            return redirect()->back()->with('error', 'すでに退勤済です');
+        }
+        $attendance->update(['end_time' => Carbon::now()]);
+        return redirect()->back()->with('success', '退勤打刻が完了しました');
+    }
+
+    //休憩入りボタンの処理
+    public function breakStart()
+    {
+        $user = Auth::user();
+        $attendance = Attendance::where('user_id', $user->id)
+            ->whereDate('date', Carbon::today())
+            ->first();
+
+        if (is_null($attendance)) {
+            return redirect()->back()->with('error', '出勤打刻がされていません');
+        }
+
+        $breaktime = Breaktime::where('attendance_id', $attendance->id)
+            ->whereNull('end_time')
+            ->first();
+
+        if ($breaktime) {
+            return redirect()->back()->with('error', 'すでに休憩中です');
         }
 
         Breaktime::create([
@@ -108,21 +115,29 @@ class AttendanceController extends Controller
         ]);
         return redirect()->back()->with('success', '休憩開始');
     }
+
     //休憩戻るボタンの処理
-    public function breakEnd(){
+    public function breakEnd()
+    {
         $user = Auth::user();
         $attendance = Attendance::where('user_id', $user->id)
             ->whereDate('date', Carbon::today())
             ->first();
+
+        // 追加：出勤打刻チェック
+        if (is_null($attendance)) {
+            return redirect()->back()->with('error', '出勤打刻がされていません');
+        }
+
         $breaktime = Breaktime::where('attendance_id', $attendance->id)
             ->whereNull('end_time')
             ->first();
-        if (is_null($breaktime)){
+
+        if (is_null($breaktime)) {
             return redirect()->back()->with('error', '休憩開始打刻がされていません');
         }
+
         $breaktime->update(['end_time' => Carbon::now()]);
         return redirect()->back()->with('success', '休憩終了');
-
     }
-
 }

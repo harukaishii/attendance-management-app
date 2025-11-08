@@ -7,6 +7,7 @@ use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvi
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
+use Laravel\Fortify\Fortify;
 
 class RouteServiceProvider extends ServiceProvider
 {
@@ -16,8 +17,9 @@ class RouteServiceProvider extends ServiceProvider
      * This is used by Laravel authentication to redirect users after login.
      *
      * @var string
+     *
      */
-    public const HOME = '/attendance';
+    public const HOME = '/';
 
     /**
      * The controller namespace for the application.
@@ -35,6 +37,20 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        Fortify::redirects('login', function () {
+            // ユーザーが認証済みであることを確認
+            if (auth()->check()) {
+                // is_admin が true (管理者) の場合
+                if (auth()->user()->is_admin) {
+                    return '/admin/attendances';
+                }
+
+                // is_admin が false (一般ユーザー) の場合
+                return '/attendance';
+            }
+            // それ以外（ログインページ）
+            return '/login';
+        });
         $this->configureRateLimiting();
 
         $this->routes(function () {
@@ -48,6 +64,7 @@ class RouteServiceProvider extends ServiceProvider
                 ->group(base_path('routes/web.php'));
         });
     }
+
 
     /**
      * Configure the rate limiters for the application.

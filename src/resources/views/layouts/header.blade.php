@@ -34,55 +34,56 @@
         </div>
         <nav class="header__nav">
             <ul class="header__nav-list">
-                @auth
-                    {{-- 管理者画面のナビメニュー --}}
-                    @if (request()->is('admin/*') || request()->is('admin'))
-                        <li class="header__nav-item">
-                            <a href="{{ route('admin_attendance_list.index')}}" class="header__nav-link">勤怠一覧</a>
-                        </li>
-                        <li class="header__nav-item">
-                            <a href="{{ route('admin_staff.index')}}" class="header__nav-link">スタッフ一覧</a>
-                        </li>
-                        <li class="header__nav-item">
-                            <a href="{{ route('admin_request.index')}}" class="header__nav-link">申請一覧</a>
-                        </li>
-                        <li class="header__nav-item">
-                            <a href="#" class="header__nav-link"
-                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                ログアウト
-                            </a>
-                            <form id="logout-form" action="{{ route('admin.logout') }}" method="POST" style="display: none;">
-                                @csrf
-                            </form>
-                        </li>
-                    {{-- 一般ユーザー画面のナビメニュー --}}
-                    @else
-                        <li class="header__nav-item">
-                            <a href="{{ route('attendance.index')}}" class="header__nav-link">勤怠</a>
-                        </li>
-                        <li class="header__nav-item">
-                            <a href="{{ route('attendance.list.index')}}" class="header__nav-link">勤怠一覧</a>
-                        </li>
-                        <li class="header__nav-item">
-                            <a href="{{ route('stamp_correction.index')}}" class="header__nav-link">申請</a>
-                        </li>
-                        <li class="header__nav-item">
-                            <a href="#" class="header__nav-link"
-                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                ログアウト
-                            </a>
-                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                @csrf
-                            </form>
-                        </li>
-                    @endif
-                @endauth
+                {{-- メール認証画面ではメニューを非表示 --}}
+                @if(!request()->routeIs('verification.notice'))
+                    @auth
+                        {{-- 管理者画面のナビメニュー --}}
+                        @if (request()->is('admin/*') || request()->is('admin'))
+                            <li class="header__nav-item">
+                                <a href="{{ route('admin_attendance_list.index')}}" class="header__nav-link">勤怠一覧</a>
+                            </li>
+                            <li class="header__nav-item">
+                                <a href="{{ route('admin_staff.index')}}" class="header__nav-link">スタッフ一覧</a>
+                            </li>
+                            <li class="header__nav-item">
+                                <a href="{{ route('admin_request.index')}}" class="header__nav-link">申請一覧</a>
+                            </li>
+                            <li class="header__nav-item">
+                                <a href="#" class="header__nav-link"
+                                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                    ログアウト
+                                </a>
+                                <form id="logout-form" action="{{ route('admin.logout') }}" method="POST" style="display: none;">
+                                    @csrf
+                                </form>
+                            </li>
+                        {{-- 一般ユーザー画面のナビメニュー --}}
+                        @else
+                            <li class="header__nav-item">
+                                <a href="{{ route('attendance.index')}}" class="header__nav-link">勤怠</a>
+                            </li>
+                            <li class="header__nav-item">
+                                <a href="{{ route('attendance.list.index')}}" class="header__nav-link">勤怠一覧</a>
+                            </li>
+                            <li class="header__nav-item">
+                                <a href="{{ route('stamp_correction.index')}}" class="header__nav-link">申請</a>
+                            </li>
+                            <li class="header__nav-item">
+                                <a href="#" class="header__nav-link"
+                                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                    ログアウト
+                                </a>
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                    @csrf
+                                </form>
+                            </li>
+                        @endif
+                    @endauth
+                @endif
             </ul>
         </nav>
     </div>
     </header>
-</body>
-
 
     <main>
         @yield('content')

@@ -18,15 +18,10 @@ use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
 |--------------------------------------------------------------------------
 | Web Routes
 |--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
 */
 
-// 一般ユーザー
-Route::middleware('auth')->group(function () {
+// 一般ユーザー（配列形式に修正）
+Route::middleware(['auth', 'verified'])->group(function () {
 
     // 打刻画面の表示
     Route::get('/attendance', [AttendanceController::class, 'index'])->name('attendance.index');

@@ -21,24 +21,58 @@ a {
     font-weight: bold;
 }
 
-.verify-send {
+
+.alert {
+    padding: 12px 20px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+}
+
+.alert-success {
+    margin-top: 20px;
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.mailhog-link__wrapper{
     margin-top: 30px;
     text-align: center;
 }
 
-.verify-send__button {
-    padding: 8px 20px;
-    border: 1px solid black;
-    border-radius: 5px;
+.verify-again__link form {
+    margin-top: 30px;
+    text-align: center;
+}
+
+.verify-again__link button {
+    background: none;
+    border: none;
+    color: #007bff;
+    text-decoration: underline;
     cursor: pointer;
-    font-size: 14px;
-    transition: background-color 0.3s ease, color 0.3s ease;
+    padding: 0;
+    font-size: inherit;
+}
+
+.verify-again__link button:hover {
+    color: #0056b3;
+}
+
+
+.mailhog-link__button {
+    text-align: center;
+    padding: 10px;
+    margin-top: 30px;
+    margin-bottom: 20px;
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
     font-weight: bold;
 }
 
-.verify-again__link {
-    margin-top: 30px;
-    text-align: center;
-    text-decoration: none;
-    color: #0073CC;
+.mailhog-link__button:hover {
+    background-color: #0056b3;
 }

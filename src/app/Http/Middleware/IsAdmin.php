@@ -16,20 +16,18 @@ class IsAdmin
      */
     public function handle(Request $request, Closure $next)
     {
-        // ユーザーがログインしているか確認
+        // ユーザーが認証済みで、かつ is_admin プロパティが truthy (1 または true) であるかを確認
+        if (auth()->check() && auth()->user()->is_admin) {
+            return $next($request);
+        }
+
+        // 認証されていないか、管理者ではない場合
         if (!auth()->check()) {
+            // 認証されていない場合はログインページへ
             return redirect()->route('login');
         }
 
-        $user = auth()->user();
-
-
-        // ユーザーが管理者か確認（複数の条件をチェック）
-        if (!$user->is_admin && $user->is_admin !== 1 && $user->is_admin !== true) {
-            abort(403, 'This action is unauthorized.');
-        }
-
-
-        return $next($request);
+        // 認証済みだが管理者ではない場合はアクセス拒否
+        abort(403, 'This action is unauthorized.');
     }
 }

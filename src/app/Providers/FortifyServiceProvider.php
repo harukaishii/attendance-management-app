@@ -24,15 +24,18 @@ class FortifyServiceProvider extends ServiceProvider
             return new class implements LoginResponse {
                 public function toResponse($request)
                 {
-
                     // セッションから判定
                     $loginType = session('login_type');
+
+                    // セッションがない場合はURLから判定（テスト用）
+                    if (!$loginType && $request->is('admin/login')) {
+                        $loginType = 'admin';
+                    }
 
                     // セッションをクリア
                     session()->forget('login_type');
                     session()->forget('auth_checked');
                     session()->forget('auth_call_count');
-
 
                     // 管理者ログインからの場合のみ管理者ページへ
                     if ($loginType === 'admin') {
@@ -94,7 +97,6 @@ class FortifyServiceProvider extends ServiceProvider
 
         // 認証ロジック
         Fortify::authenticateUsing(function (Request $request) {
-
             session()->increment('auth_call_count');
             $user = User::where('email', $request->email)->first();
 
@@ -110,7 +112,13 @@ class FortifyServiceProvider extends ServiceProvider
             if (session('auth_checked') === true) {
                 return $user;
             }
+
             $loginType = session('login_type');
+
+            // セッションがない場合はURLから判定（テスト用）
+            if (!$loginType && $request->is('admin/login')) {
+                $loginType = 'admin';
+            }
 
             // 管理者ログインページからのアクセスの場合のみ is_admin をチェック
             if ($loginType === 'admin') {
@@ -118,13 +126,14 @@ class FortifyServiceProvider extends ServiceProvider
                     return null;
                 }
             }
-            // 一般ユーザーログインページからのアクセスは誰でもOK
-            elseif ($loginType === 'user') {
-            }
 
             // 1回チェック済みフラグを立てる
             session(['auth_checked' => true]);
             return $user;
+        });
+
+        Fortify::verifyEmailView(function () {
+            return view('auth.verify_email');
         });
     }
 }
