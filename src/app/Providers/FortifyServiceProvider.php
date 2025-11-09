@@ -64,6 +64,17 @@ class FortifyServiceProvider extends ServiceProvider
                 }
             };
         });
+
+        // ★ RegisterResponseを追加
+        $this->app->singleton(\Laravel\Fortify\Contracts\RegisterResponse::class, function () {
+            return new class implements \Laravel\Fortify\Contracts\RegisterResponse {
+                public function toResponse($request)
+                {
+                    // 登録後のリダイレクト先を指定
+                    return redirect('/email/verify');
+                }
+            };
+        });
     }
 
     public function boot(): void

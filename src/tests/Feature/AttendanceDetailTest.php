@@ -399,7 +399,7 @@ class AttendanceDetailTest extends TestCase
         ]);
 
         $response->assertRedirect();
-        $response->assertSessionHas('error', '承認待ちのため修正できません。');
+        $response->assertSessionHas('error', '承認待ちのため修正はできません。');
     }
 
     /**
