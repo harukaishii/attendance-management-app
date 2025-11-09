@@ -59,7 +59,7 @@
             @elseif ($attendanceStatus === 'onBreak')
                 <form action="{{ route('break.end') }}" method="POST" class="form-action">
                     @csrf
-                    <button type="submit" class="button button-primary">休憩戻</button>
+                    <button type="submit" class="button button-secondary">休憩戻</button>
                 </form>
 
             @elseif ($attendanceStatus === 'finished')
@@ -72,5 +72,17 @@
 
 @section('scripts')
 <script>
+    const messageBoxes = document.querySelectorAll('.message-box');
+    messageBoxes.forEach(messageBox => {
+        if (messageBox) {
+            setTimeout(() => {
+                messageBox.style.transition = 'opacity 0.5s';
+                messageBox.style.opacity = '0';
+                setTimeout(() => {
+                    messageBox.remove();
+                }, 500);
+            }, 3000);
+        }
+    });
 </script>
 @endsection

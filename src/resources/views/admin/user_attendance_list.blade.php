@@ -42,15 +42,15 @@
             @foreach ($calendar as $data)
             <tr @if ($data['isFuture'] && $data['id']) class="future-date" @endif>
                 <td class="date-col">{{ $data['date'] }}</td>
-                <td>{{ $data['start'] ?? '-' }}</td>
-                <td>{{ $data['end'] ?? '-' }}</td>
-                <td>{{ $data['break'] ?? '-' }}</td>
-                <td>{{ $data['total'] ?? '-' }}</td>
+                <td>{{ $data['start'] ?? '' }}</td>
+                <td>{{ $data['end'] ?? '' }}</td>
+                <td>{{ $data['break'] ?? '' }}</td>
+                <td>{{ $data['total'] ?? '' }}</td>
                 <td class="detail-col">
                     @if ($data['start'])
                         <a href="{{ route('admin_attendance_detail.show', ['id' => $data['id']]) }}" class="detail-link">詳細</a>
                     @else
-                        -
+                        <span class="detail-link disabled">詳細</span>
                     @endif
                 </td>
             </tr>

@@ -49,10 +49,10 @@
                 @if ($data['start'] || $data['end'])
                 <tr>
                     <td class="date-col">{{ $data['name'] }}</td>
-                    <td>{{ $data['start'] ?? '-' }}</td>
-                    <td>{{ $data['end'] ?? '-' }}</td>
-                    <td>{{ $data['break'] ?? '-' }}</td>
-                    <td>{{ $data['total'] ?? '-' }}</td>
+                    <td>{{ $data['start'] ?? '' }}</td>
+                    <td>{{ $data['end'] ?? '' }}</td>
+                    <td>{{ $data['break'] ?? '' }}</td>
+                    <td>{{ $data['total'] ?? '' }}</td>
                     <td class="detail-col">
                         @if ($data['start'])
                             <a href="{{ route('admin_attendance_detail.show', ['id' => $data['id']]) }}" class="detail-link">詳細</a>
@@ -76,7 +76,6 @@
 
 @section('scripts')
 <script>
-    // 成功メッセージを3秒後に自動で消す
     const successMessage = document.getElementById('successMessage');
     if (successMessage) {
         setTimeout(() => {
@@ -85,7 +84,7 @@
             setTimeout(() => {
                 successMessage.remove();
             }, 500);
-        }, 3000); // 3秒後にフェードアウト開始
+        }, 3000);
     }
 </script>
 @endsection

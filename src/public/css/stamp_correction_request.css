@@ -72,9 +72,10 @@ body {
     background-color: #ffffff;
     font-weight: bold;
     border: none;
-    border-bottom: 1px solid #e5e7eb;
+    border-bottom: 3px solid #E1E1E1;
     white-space: nowrap;
     text-align: center;
+    color: #737373;
 }
 
 /* データ */
@@ -82,9 +83,10 @@ body {
     padding: 14px 16px;
     background-color: #ffffff;
     border: none;
-    border-bottom: 1px solid #e5e7eb;
+    border-bottom: 2px solid #E1E1E1;
     text-align: center;
     vertical-align: middle;
+    color: #737373;
 }
 
 /* 左右端の線 */
@@ -159,6 +161,7 @@ body {
 /* 詳細リンク */
 .detail-link {
     color: #000;
+    font-weight: bold;
     text-decoration: none;
 }
 

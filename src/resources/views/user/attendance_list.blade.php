@@ -48,15 +48,20 @@
             @foreach ($calendar as $data)
             <tr @if ($data['isFuture'] && $data['id']) class="future-date" @endif>
                 <td class="date-col">{{ $data['date'] }}</td>
-                <td>{{ $data['start'] ?? '-' }}</td>
-                <td>{{ $data['end'] ?? '-' }}</td>
-                <td>{{ $data['break'] ?? '-' }}</td>
-                <td>{{ $data['total'] ?? '-' }}</td>
-                <td class="detail-col">
-                    @if (!$data['isFuture'] && $data['start']) <a href="{{ route('attendance.detail.show', ['id' => $data['id']]) }}" class="detail-link">詳細</a>
-                @else
-                    -
-                @endif
+                <td>{{ $data['start'] ?? '' }}</td>
+                <td>{{ $data['end'] ?? '' }}</td>
+                <td>{{ $data['break'] ?? '' }}</td>
+                <td>{{ $data['total'] ?? '' }}</td>
+               <td class="detail-col">
+                    @if (!$data['isFuture'])
+                        @if ($data['id'])
+                            <a href="{{ route('attendance.detail.show', ['id' => $data['id']]) }}" class="detail-link">詳細</a>
+                        @else
+                            <span class="detail-link disabled">詳細</span>
+                        @endif
+                    @else
+                        -
+                    @endif
                 </td>
             </tr>
             @endforeach

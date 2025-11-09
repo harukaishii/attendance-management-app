@@ -25,7 +25,7 @@ class StampCorrectionController extends Controller
         $applications = Attendance::with('user')
             ->where('user_id', $userId)
             ->whereIn('status', $statusesToFilter)
-            ->orderBy('updated_at', 'desc')
+            ->orderBy('date', 'desc')
             ->get();
 
         return view('user.stamp_correction_request', [

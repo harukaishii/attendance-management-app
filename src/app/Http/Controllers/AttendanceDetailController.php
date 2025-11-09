@@ -52,7 +52,7 @@ class AttendanceDetailController extends Controller
 
 
         if ($attendance->status->value === AttendanceStatus::Unapproved->value) {
-            return back()->with('error', '承認待ちのため修正できません。');
+            return back()->with('error', '承認待ちのため修正はできません。');
         }
 
         DB::beginTransaction();
